@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  mysql-server:
+    image: mysql
+    container_name: mysql
+    ports:
+    - "33061:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - /home/pc10/Tranning/mysql-server:/var/lib/mysql
