@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query, UseGuards} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
@@ -6,6 +6,7 @@ import { UserService } from './user.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import {FilterUserDto} from "./dto/filter-user.dto";
 
 @Controller('users')
 export class UserController {
@@ -15,8 +16,9 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll(): Promise<User[]> {
-    return this.userService.findAll();
+  findAll(@Query() query:FilterUserDto): Promise<User[]> {
+    console.log("query", query);
+    return this.userService.findAll(query);
   }
 
   @UseGuards(AuthGuard)
