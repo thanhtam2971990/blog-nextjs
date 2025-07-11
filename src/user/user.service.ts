@@ -16,13 +16,16 @@ export class UserService {
     const items_per_page = Number(query.items_per_page) || 10;
     const page = Number(query.page) || 1;
     const skip = (page - 1) * items_per_page;
-    const search = query.search;
+    const search = query.search?.trim();
+    const where = search
+        ? [
+          { first_name: Like(`%${search}%`) },
+          { last_name: Like(`%${search}%`) },
+          { email: Like(`%${search}%`) },
+        ]
+        : {};
     const [res, total] = await this.userRepository.findAndCount({
-      where: [
-        {first_name:Like('%' + search + '%')},
-        {last_name:Like('%' + search + '%')},
-        {email:Like('%' + search + '%')},
-      ],
+      where,
       order: {created_at: 'DESC'},
       take: items_per_page,
       skip: skip,
